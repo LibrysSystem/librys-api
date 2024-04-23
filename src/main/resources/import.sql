@@ -4,5 +4,5 @@ insert into livro (id, nome, autor, editora, genero_literario, edicao, codigo_lo
 insert into livro (id, nome, autor, editora, genero_literario, edicao, codigo_localizacao, livro_alugado) values (4, 'É assim que acaba', 'Colleen Hoover', 'Ancora', 'Romance', '1° edição', 'B223D', false);
 insert into livro (id, nome, autor, editora, genero_literario, edicao, codigo_localizacao, livro_alugado) values (5, 'Todas as suas imperfeições', 'Colleen Hoover', 'Ancora', 'Romance', '5° edição', 'C23D', true);
 
-insert into cliente (id, nome, cpf, data_nascimento, celular, email, endereco, menor_idade) values (1, 'Alberto Abreu', '902.358.270-53', '10/05/2001', '3341-0032', 'alberto@gamil.com', "Rua qualquer, 10" ,false);
-insert into cliente (id, nome, cpf, data_nascimento, celular, email, endereco, menor_idade) values (2, 'Bernano Bento', '298.263.530-51', '29/12/2010', '3341-2045', 'bernado@gamil.com', "Rua alguma, 154" , false);
+# insert into cliente (id, nome, cpf, data_nascimento, celular, email, endereco, menor_idade) values (1, 'Alberto Abreu', '902.358.270-53', '10/05/2001', '3341-0032', 'alberto@gamil.com', "Rua qualquer, 10" ,false);
+# insert into cliente (id, nome, cpf, data_nascimento, celular, email, endereco, menor_idade) values (2, 'Bernano Bento', '298.263.530-51', '29/12/2010', '3341-2045', 'bernado@gamil.com', "Rua alguma, 154" , false);
