@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.br.CPF;
 
+import java.math.BigDecimal;
+
 @MenorIdade(valorField = "menorDeIdade", nomeResponsavelField = "nomeDoResponsavel", cpfResponsavelField = "cpfDoResponsavel",
         celularResponsavelField = "celularDoResponsavel", emailResponsavelField = "emailDoResponsavel")
 @Data
