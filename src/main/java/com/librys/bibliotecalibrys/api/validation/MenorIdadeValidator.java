@@ -32,7 +32,10 @@ public class MenorIdadeValidator implements ConstraintValidator<MenorIdade, Obje
             String campoCpf = (String) FieldUtils.readField(objetoValidacao, cpfResponsavelField, true);
             String campoEmail = (String) FieldUtils.readField(objetoValidacao, emailResponsavelField, true);
 
-            if((valor) && (campoNome.isBlank() || campoCelular.isBlank() || campoCpf.isBlank() || campoEmail.isBlank())){
+            if (valor && ((campoNome == null || campoNome.isBlank()) ||
+                    (campoCelular == null || campoCelular.isBlank()) ||
+                    (campoCpf == null || campoCpf.isBlank()) ||
+                    (campoEmail == null || campoEmail.isBlank()))) {
                 return false;
             }
 

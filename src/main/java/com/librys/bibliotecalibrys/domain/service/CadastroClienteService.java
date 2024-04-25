@@ -1,10 +1,8 @@
 package com.librys.bibliotecalibrys.domain.service;
 
 import com.librys.bibliotecalibrys.domain.exception.ClienteNaoEncontradoException;
-import com.librys.bibliotecalibrys.domain.exception.ValidacaoException;
 import com.librys.bibliotecalibrys.domain.model.Cliente;
 import com.librys.bibliotecalibrys.domain.repository.ClienteRepository;
-import jakarta.validation.ValidationException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,8 +59,8 @@ public class CadastroClienteService {
         try {
             return clienteRepository.save(cliente);
 
-        } catch (ValidationException e){
-            throw new ValidacaoException(e.getMessage());
+        } catch (ClienteNaoEncontradoException e){
+            throw new ClienteNaoEncontradoException(e.getMessage());
         }
     }
 
@@ -72,14 +70,10 @@ public class CadastroClienteService {
     }
 
     public Cliente atualizar(Long clinteId, Cliente cliente){
-        try {
-            Cliente clienteAtual = clienteRepository.findById(clinteId).orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado."));
-            BeanUtils.copyProperties(cliente, clienteAtual, "id");
+        Cliente clienteAtual = clienteRepository.findById(clinteId).orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado."));
+        BeanUtils.copyProperties(cliente, clienteAtual, "id");
 
-            return  clienteRepository.save(clienteAtual);
-        } catch (ValidacaoException e){
-            throw new ValidacaoException(e.getMessage());
-        }
+        return  clienteRepository.save(clienteAtual);
     }
 
 }

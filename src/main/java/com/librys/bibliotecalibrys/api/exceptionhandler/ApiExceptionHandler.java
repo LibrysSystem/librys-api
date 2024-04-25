@@ -6,11 +6,15 @@ import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import com.librys.bibliotecalibrys.domain.exception.ClienteNaoEncontradoException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -48,6 +52,31 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         Problema problema = createProblemBuilder(status, tipoProblema, detalhe).build();
 
         return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        return handleValidationInternal(ex, ex.getBindingResult(), headers, (HttpStatus) status, request);
+    }
+
+    private ResponseEntity<Object> handleValidationInternal(Exception ex, BindingResult bindingResult, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        TipoProblema tipoProblema = TipoProblema.DADOS_INVALIDOS;
+        String detalhe = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
+
+        List<Problema.Object> problemObjects = bindingResult.getAllErrors().stream().map(objectError -> {
+                    String mensagem = getMessageSource().getMessage(objectError, LocaleContextHolder.getLocale());
+
+                    String nome = objectError.getObjectName();
+
+                    if (objectError instanceof FieldError) {
+                        nome = ((FieldError) objectError).getField();
+                    }
+
+                    return Problema.Object.builder().nome(nome).mensagemUsuario(mensagem).build();
+        }).collect(Collectors.toList());
+
+        Problema problema = createProblemBuilder(status, tipoProblema, detalhe).mensagemUsuario(detalhe).objects(problemObjects).build();
+        return handleExceptionInternal(ex, problema, headers, status, request);
     }
 
     private ResponseEntity<Object> handlePropertyBinding(PropertyBindingException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {

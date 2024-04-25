@@ -5,7 +5,6 @@ import com.librys.bibliotecalibrys.domain.service.CadastroClienteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,7 +43,7 @@ public class ClienteController {
     }
 
     @PostMapping
-    public Cliente salvar(@RequestBody Cliente cliente){
+    public Cliente salvar(@Valid @RequestBody Cliente cliente){
         return cadastroCliente.adicionar(cliente);
     }
 
@@ -55,7 +54,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{clienteId}")
-    public Cliente editar(@PathVariable Long clienteId, @RequestBody Cliente cliente){
+    public Cliente editar(@PathVariable Long clienteId, @Valid @RequestBody Cliente cliente){
         return cadastroCliente.atualizar(clienteId, cliente);
     }
 
