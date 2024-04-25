@@ -1,17 +1,13 @@
 package com.librys.bibliotecalibrys.domain.service;
 
-import com.librys.bibliotecalibrys.domain.exception.EntidadeNaoEncontradaException;
+import com.librys.bibliotecalibrys.domain.exception.ClienteNaoEncontradoException;
 import com.librys.bibliotecalibrys.domain.model.Cliente;
 import com.librys.bibliotecalibrys.domain.repository.ClienteRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CadastroClienteService {
@@ -23,80 +19,61 @@ public class CadastroClienteService {
         return clienteRepository.findAll();
     }
 
-    public ResponseEntity<Cliente> buscar(Long clienteId){
+    public Cliente buscar(Long clienteId){
 
-        Optional<Cliente> cliente = clienteRepository.findById(clienteId);
-
-        if(cliente.isPresent()) {
-            return ResponseEntity.ok(cliente.get());
-        }
-
-        return ResponseEntity.notFound().build();
+        return clienteRepository.findById(clienteId).orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado."));
 
     }
 
-    public ResponseEntity<List<Cliente>> buscarPorNome(String nome){
+    public List<Cliente> buscarPorNome(String nome){
         List<Cliente> nomePesquisado = clienteRepository.findByNomeContainingIgnoreCase(nome);
 
         if(nomePesquisado.isEmpty()){
-            return ResponseEntity.notFound().build();
+            throw new ClienteNaoEncontradoException("Cliente(s) não encontrado(s).");
         }
 
-        return ResponseEntity.ok(nomePesquisado);
+        return nomePesquisado;
     }
 
-    public ResponseEntity<List<Cliente>> buscarPorCpf(String cpf){
+    public List<Cliente> buscarPorCpf(String cpf){
         List<Cliente> cpfPesquisado = clienteRepository.findByCpfContainingIgnoreCase(cpf);
 
         if(cpfPesquisado.isEmpty()){
-            return ResponseEntity.notFound().build();
+            throw new ClienteNaoEncontradoException("Cliente(s) não encontrado(s).");
         }
 
-        return ResponseEntity.ok(cpfPesquisado);
+        return cpfPesquisado;
     }
 
-    public ResponseEntity<List<Cliente>> buscarPorEmail(String email){
+    public List<Cliente> buscarPorEmail(String email){
         List<Cliente> emailPesquisado = clienteRepository.findByEmailContainingIgnoreCase(email);
 
         if(emailPesquisado.isEmpty()){
-            return ResponseEntity.notFound().build();
+            throw new ClienteNaoEncontradoException("Cliente(s) não encontrado(s).");
         }
 
-        return ResponseEntity.ok(emailPesquisado);
+        return emailPesquisado;
     }
 
-    public ResponseEntity<?> adicionar(Cliente cliente){
+    public Cliente adicionar(Cliente cliente){
         try {
-            cliente = clienteRepository.save(cliente);
-            return ResponseEntity.status(HttpStatus.CREATED).body(cliente);
+            return clienteRepository.save(cliente);
 
-        } catch (DataIntegrityViolationException e){
-            return ResponseEntity.badRequest().body("Erro: dado(s) incorreto(s)");
+        } catch (ClienteNaoEncontradoException e){
+            throw new ClienteNaoEncontradoException(e.getMessage());
         }
     }
 
-    public ResponseEntity<?> excluir(Long clienteId){
-
-        if (!clienteRepository.existsById(clienteId)) {
-            throw new EntidadeNaoEncontradaException(String.format("Cliente com código %d não encontrado.", clienteId));
-        }
-
-        clienteRepository.deleteById(clienteId);
-        return ResponseEntity.noContent().build();
+    public void excluir(Long clienteId){
+        Cliente clienteProcurado = clienteRepository.findById(clienteId).orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado."));
+        clienteRepository.deleteById(clienteProcurado.getId());
     }
 
-    public ResponseEntity<?> atualizar(Long clinteId, Cliente cliente){
+    public Cliente atualizar(Long clinteId, Cliente cliente){
+        Cliente clienteAtual = clienteRepository.findById(clinteId).orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado."));
+        BeanUtils.copyProperties(cliente, clienteAtual, "id");
 
-        Optional<Cliente> clienteAtual = clienteRepository.findById(clinteId);
-
-        if(clienteAtual.isPresent()){
-
-            BeanUtils.copyProperties(cliente, clienteAtual.get(), "id");
-            Cliente clienteSalvo = clienteRepository.save(clienteAtual.get());
-            return ResponseEntity.ok(clienteSalvo);
-
-        }
-
-        return ResponseEntity.notFound().build();
+        return  clienteRepository.save(clienteAtual);
     }
+
 }
