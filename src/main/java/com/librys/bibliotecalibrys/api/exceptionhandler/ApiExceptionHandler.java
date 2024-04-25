@@ -96,10 +96,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         String path = joinPath(ex.getPath());
 
         TipoProblema problemType = TipoProblema.MENSAGEM_INCOMPREENSIVEL;
-        String detail = String.format("A propriedade '%s' recebeu o valor '%s', que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s.",
+        String detalhe = String.format("A propriedade '%s' recebeu o valor '%s', que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s.",
                 path, ex.getValue(), ex.getTargetType().getSimpleName());
 
-        Problema problema = createProblemBuilder(status, problemType, detail).mensagemUsuario(MSG_ERRO_GENERICA_USUARIO_FINAL).build();
+        Problema problema = createProblemBuilder(status, problemType, detalhe).mensagemUsuario(MSG_ERRO_GENERICA_USUARIO_FINAL).build();
 
         return handleExceptionInternal(ex, problema, headers, status, request);
     }
