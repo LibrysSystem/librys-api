@@ -12,7 +12,6 @@ import java.util.List;
 public class Problema {
 
     private Integer status;
-    private String tipo;
     private String titulo;
     private String detalhe;
     private String mensagemUsuario;

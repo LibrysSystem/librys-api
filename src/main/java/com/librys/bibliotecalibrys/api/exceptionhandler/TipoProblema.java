@@ -5,16 +5,16 @@ import lombok.Getter;
 @Getter
 public enum TipoProblema {
 
-    ERRO_DE_SISTEMA("/erro-de-sistema", "Erro de sistema"),
-    MENSAGEM_INCOMPREENSIVEL("/mensagem-incompreensivel", "Mensagem incompreensível"),
-    RECURSO_NAO_ENCONTRADO("/recurso-nao-encontrado", "Recurso não encontrado"),
-    DADOS_INVALIDOS("/dados-invalidos", "Dados inválidos");
+    PARAMETRO_INVALIDO("Parâmetro inválido"),
+    RECURSO_NAO_ENCONTRADO("Recurso não encontrado"),
+    ERRO_DE_SISTEMA("Erro de sistema"),
+    MENSAGEM_INCOMPREENSIVEL("Mensagem incompreensível"),
+    ENTIDADE_NAO_ENCONTRADA("Entidade não encontrada"),
+    DADOS_INVALIDOS("Dados inválidos");
 
     private String titulo;
-    private String uri;
 
-    TipoProblema(String uri, String titulo) {
-        this.uri = "https://librys.com.br" + uri;
+    TipoProblema(String titulo) {
         this.titulo = titulo;
     }
 }

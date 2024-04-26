@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.librys.bibliotecalibrys.domain.model.Livro;
 import com.librys.bibliotecalibrys.domain.service.CadastroLivroService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,35 +32,34 @@ public class LivroController {
 	 public List<Livro> exibir(){
 		 return cadastroLivro.listar();
 	 }
-	 
 	 @GetMapping("/{livroId}")
-	 public ResponseEntity<Livro> pesquisar(@PathVariable Long livroId){
+	 public Livro pesquisar(@PathVariable Long livroId){
 	    return cadastroLivro.buscar(livroId);
 	 }
-	 
 	 @GetMapping("/por-nome")
-	 public ResponseEntity<List<Livro>> pesquisarPorNome(@RequestParam String nome){
+	 public List<Livro> pesquisarPorNome(@RequestParam String nome){
 		 return cadastroLivro.buscarPorNome(nome);
 	 }
 	 
 	 @GetMapping("/por-autor")
-	 public ResponseEntity<List<Livro>> pesquisarPorAutor(@RequestParam String autor){
+	 public List<Livro> pesquisarPorAutor(@RequestParam String autor){
 		 return cadastroLivro.buscarPorAutor(autor);
 	 }
 	   
 	 @PostMapping
 	 @ResponseStatus(HttpStatus.CREATED)
-	 public Livro salvar(@RequestBody Livro livro){
+	 public Livro salvar(@Valid @RequestBody Livro livro){
 	    return cadastroLivro.adicionar(livro);
 	 }
 
 	 @DeleteMapping("/{livroId}")
-	 public ResponseEntity<?> remover(@PathVariable Long livroId){
-	    return cadastroLivro.excluir(livroId);
+	 @ResponseStatus(HttpStatus.NO_CONTENT)
+	 public void remover(@PathVariable Long livroId) {
+		 cadastroLivro.excluir(livroId);
 	 }
 
 	 @PutMapping("/{livroId}")
-	 public ResponseEntity<?> editar(@PathVariable Long livroId, @RequestBody Livro livro){
+	 public Livro editar(@Valid @PathVariable Long livroId, @RequestBody Livro livro){
 	    return cadastroLivro.atualizar(livroId, livro);
 	 }
 

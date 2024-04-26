@@ -21,7 +21,7 @@ public class CadastroClienteService {
 
     public Cliente buscar(Long clienteId){
 
-        return clienteRepository.findById(clienteId).orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado."));
+        return clienteRepository.findById(clienteId).orElseThrow(() -> new ClienteNaoEncontradoException(clienteId));
 
     }
 

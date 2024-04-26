@@ -1,13 +1,13 @@
 package com.librys.bibliotecalibrys.domain.service;
 
 import java.util.List;
-import java.util.Optional;
 
+import com.librys.bibliotecalibrys.domain.exception.ClienteNaoEncontradoException;
+import com.librys.bibliotecalibrys.domain.exception.LivroNaoEncontradoException;
 import com.librys.bibliotecalibrys.domain.model.Livro;
 import com.librys.bibliotecalibrys.domain.repository.LivroRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -22,66 +22,41 @@ public class CadastroLivroService {
         return livroRepository.findAll();
     }
 
-    public ResponseEntity<Livro> buscar(Long livroId){
+    public Livro buscar(Long livroId){
+        return livroRepository.findById(livroId).
+                orElseThrow(() -> new LivroNaoEncontradoException(livroId));
+    }
+    
+    public List<Livro> buscarPorNome(String nome) {
+        List<Livro> livroPesquisado = livroRepository.findByNomeContainingIgnoreCase(nome);
 
-        Optional<Livro> livroPesquisado = livroRepository.findById(livroId);
-
-        if(livroPesquisado.isPresent()) {
-            return ResponseEntity.ok(livroPesquisado.get());
+        if (livroPesquisado.isEmpty()) {
+            throw new LivroNaoEncontradoException(
+                    String.format("Livro '%s' não encontrado",  nome));
         }
-
-        return ResponseEntity.notFound().build();
-
+        return livroPesquisado;
     }
     
-    public ResponseEntity<List<Livro>> buscarPorNome(String nome){
-    	List<Livro> livroPesquisado = livroRepository.findByNomeContainingIgnoreCase(nome);
-    	
-    	if(livroPesquisado.isEmpty()) {
-    		return ResponseEntity.notFound().build();
-    	}
-    	
-    	return ResponseEntity.ok(livroPesquisado); 	
-    }
-    
-    public ResponseEntity<List<Livro>> buscarPorAutor(String autor){
+    public List<Livro> buscarPorAutor(String autor){
     	List<Livro> livroPesquisado = livroRepository.findByAutorContainingIgnoreCase(autor);
     	
     	if(livroPesquisado.isEmpty()) {
-    		return ResponseEntity.notFound().build();
+    		throw new LivroNaoEncontradoException(String.format("Livro do autor '%s' não encontrado", autor));
     	}
-    	return ResponseEntity.ok(livroPesquisado);
+    	return livroPesquisado;
     }
-   
-    public Livro adicionar(Livro livro){
-    	return livroRepository.save(livro); 
-       
+    public Livro adicionar(Livro livro) {
+        return livroRepository.save(livro);
     }
-
-    public ResponseEntity<Livro> excluir(Long livroId){
-
-    	Optional<Livro> livroPesquisado = livroRepository.findById(livroId);
-    	
-        if (livroPesquisado.isPresent()) {
-        	livroRepository.deleteById(livroId);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public void excluir(Long livroId){
+        buscar(livroId);
+        livroRepository.deleteById(livroId);
   
     }
+    public Livro atualizar(Long livroId, Livro livro){
+        Livro livroPesquisado = buscar(livroId);
 
-    public ResponseEntity<Livro> atualizar(Long livroId, Livro livro){
-
-        Optional<Livro> livroPesquisado = livroRepository.findById(livroId);
-
-        if(livroPesquisado.isPresent()){
-
-            BeanUtils.copyProperties(livro, livroPesquisado.get(), "id");
-            Livro livroSalvo = livroRepository.save(livroPesquisado.get());
-            return ResponseEntity.ok(livroSalvo);
-
-        }
-
-        return ResponseEntity.notFound().build();
+        BeanUtils.copyProperties(livro, livroPesquisado, "id");
+        return livroRepository.save(livroPesquisado);
     }
 }
