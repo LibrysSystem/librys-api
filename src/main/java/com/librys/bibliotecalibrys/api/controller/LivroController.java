@@ -59,7 +59,7 @@ public class LivroController {
 	 }
 
 	 @PutMapping("/{livroId}")
-	 public Livro editar(@Valid @PathVariable Long livroId, @RequestBody Livro livro){
+	 public Livro editar(@PathVariable Long livroId, @Valid @RequestBody Livro livro){
 	    return cadastroLivro.atualizar(livroId, livro);
 	 }
 

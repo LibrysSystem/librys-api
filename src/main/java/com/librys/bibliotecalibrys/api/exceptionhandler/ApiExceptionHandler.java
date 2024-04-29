@@ -3,6 +3,7 @@ package com.librys.bibliotecalibrys.api.exceptionhandler;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
+import com.librys.bibliotecalibrys.domain.exception.CpfEmUsoException;
 import com.librys.bibliotecalibrys.domain.exception.EntidadeNaoEncontradaException;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -105,24 +106,36 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return super.handleTypeMismatch(ex, headers, status, request);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleUncaught(Exception ex, WebRequest request) {
-
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        TipoProblema tipoProblema = TipoProblema.ERRO_DE_SISTEMA;
-        String detalhe = MSG_ERRO_GENERICA_USUARIO_FINAL;
-
-        ex.printStackTrace();
-
-        Problema problema = createProblemBuilder(status, tipoProblema, detalhe).build();
-
-        return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<Object> handleUncaught(Exception ex, WebRequest request) {
+//
+//        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+//        TipoProblema tipoProblema = TipoProblema.ERRO_DE_SISTEMA;
+//        String detalhe = MSG_ERRO_GENERICA_USUARIO_FINAL;
+//
+//        ex.printStackTrace();
+//
+//        Problema problema = createProblemBuilder(status, tipoProblema, detalhe).build();
+//
+//        return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+//    }
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     public ResponseEntity<?> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException ex, WebRequest request) {
 
         HttpStatus status = HttpStatus.NOT_FOUND;
         TipoProblema tipoProblema = TipoProblema.ENTIDADE_NAO_ENCONTRADA;
+        String detalhe = ex.getMessage();
+
+        Problema problema = createProblemBuilder(status, tipoProblema, detalhe).build();
+
+        return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(CpfEmUsoException.class)
+    public ResponseEntity<?> handleCpfEmUso(CpfEmUsoException ex, WebRequest request) {
+
+        HttpStatus status = HttpStatus.CONFLICT;
+        TipoProblema tipoProblema = TipoProblema.CPF_EM_USO;
         String detalhe = ex.getMessage();
 
         Problema problema = createProblemBuilder(status, tipoProblema, detalhe).build();
@@ -145,7 +158,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                         nome = ((FieldError) objectError).getField();
                     }
 
-                    return Problema.Object.builder().nome(nome).build();
+                    return Problema.Object.builder().nome(nome).mensagemUsuario(mensagem).build();
         }).collect(Collectors.toList());
 
         Problema problema = createProblemBuilder( status, tipoProblema, detalhe).objects(problemObjects).build();
