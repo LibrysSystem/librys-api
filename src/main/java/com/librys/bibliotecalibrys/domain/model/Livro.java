@@ -44,7 +44,7 @@ public class Livro {
 	private String codigoLocalizacao;
 	
 	@NotNull
-	@Column(name = "livro_alugado")
+	@Column(name = "livro_alugado", nullable = false)
 	private boolean isAlugado;
 	
 

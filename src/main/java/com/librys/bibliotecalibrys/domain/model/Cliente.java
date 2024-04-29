@@ -27,7 +27,7 @@ public class Cliente {
     private String nome;
 
     @CPF
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String cpf;
 
     @NotNull
