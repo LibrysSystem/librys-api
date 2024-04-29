@@ -106,19 +106,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return super.handleTypeMismatch(ex, headers, status, request);
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<Object> handleUncaught(Exception ex, WebRequest request) {
-//
-//        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-//        TipoProblema tipoProblema = TipoProblema.ERRO_DE_SISTEMA;
-//        String detalhe = MSG_ERRO_GENERICA_USUARIO_FINAL;
-//
-//        ex.printStackTrace();
-//
-//        Problema problema = createProblemBuilder(status, tipoProblema, detalhe).build();
-//
-//        return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleUncaught(Exception ex, WebRequest request) {
+
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        TipoProblema tipoProblema = TipoProblema.ERRO_DE_SISTEMA;
+        String detalhe = MSG_ERRO_GENERICA_USUARIO_FINAL;
+
+        ex.printStackTrace();
+
+        Problema problema = createProblemBuilder(status, tipoProblema, detalhe).build();
+
+        return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+    }
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     public ResponseEntity<?> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException ex, WebRequest request) {
 
