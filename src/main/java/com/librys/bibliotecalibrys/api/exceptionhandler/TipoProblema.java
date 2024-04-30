@@ -11,7 +11,7 @@ public enum TipoProblema {
     MENSAGEM_INCOMPREENSIVEL("Mensagem incompreensível"),
     ENTIDADE_NAO_ENCONTRADA("Entidade não encontrada"),
     DADOS_INVALIDOS("Dados inválidos"),
-    CPF_EM_USO("Cpf em uso");
+    ENTIDADE_EM_USO("Entidade em uso");
 
     private String titulo;
 
