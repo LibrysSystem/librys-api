@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import com.librys.bibliotecalibrys.domain.exception.CpfEmUsoException;
+import com.librys.bibliotecalibrys.domain.exception.EntidadeEmUsoException;
 import com.librys.bibliotecalibrys.domain.exception.EntidadeNaoEncontradaException;
+import com.librys.bibliotecalibrys.domain.exception.NegocioException;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -131,11 +133,23 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
     }
 
-    @ExceptionHandler(CpfEmUsoException.class)
-    public ResponseEntity<?> handleCpfEmUso(CpfEmUsoException ex, WebRequest request) {
+    @ExceptionHandler(NegocioException.class)
+    public ResponseEntity<?> handleNegocioException(NegocioException ex, WebRequest request){
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        TipoProblema tipoProblema = TipoProblema.ENTIDADE_NAO_ENCONTRADA;
+        String detalhe = ex.getMessage();
+
+        Problema problema = createProblemBuilder(status, tipoProblema, detalhe).build();
+
+        return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(EntidadeEmUsoException.class)
+    public ResponseEntity<?> handleEntidadeEmUso(EntidadeEmUsoException ex, WebRequest request) {
 
         HttpStatus status = HttpStatus.CONFLICT;
-        TipoProblema tipoProblema = TipoProblema.CPF_EM_USO;
+        TipoProblema tipoProblema = TipoProblema.ENTIDADE_EM_USO;
         String detalhe = ex.getMessage();
 
         Problema problema = createProblemBuilder(status, tipoProblema, detalhe).build();

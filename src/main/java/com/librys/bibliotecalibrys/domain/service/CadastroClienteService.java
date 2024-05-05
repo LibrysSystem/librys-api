@@ -2,6 +2,7 @@ package com.librys.bibliotecalibrys.domain.service;
 
 import com.librys.bibliotecalibrys.domain.exception.ClienteNaoEncontradoException;
 import com.librys.bibliotecalibrys.domain.exception.CpfEmUsoException;
+import com.librys.bibliotecalibrys.domain.exception.LivroEmUsoException;
 import com.librys.bibliotecalibrys.domain.model.Cliente;
 import com.librys.bibliotecalibrys.domain.repository.ClienteRepository;
 import org.springframework.beans.BeanUtils;
@@ -57,13 +58,16 @@ public class CadastroClienteService {
         return emailPesquisado;
     }
 
-    public Cliente adicionar(Cliente cliente){
-        try {
-            return clienteRepository.save(cliente);
+    public Cliente adicionar(Cliente cliente) {
 
-        } catch (DataIntegrityViolationException e){
+        List<Cliente> cpfPesquisado = clienteRepository.findByCpfContainingIgnoreCase(cliente.getCpf());
+
+        if (!cpfPesquisado.isEmpty()) {
             throw new CpfEmUsoException(cliente);
         }
+
+        return clienteRepository.save(cliente);
+
     }
 
     public void excluir(Long clienteId){

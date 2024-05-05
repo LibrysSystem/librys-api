@@ -3,11 +3,13 @@ package com.librys.bibliotecalibrys.domain.service;
 import java.util.List;
 
 import com.librys.bibliotecalibrys.domain.exception.ClienteNaoEncontradoException;
+import com.librys.bibliotecalibrys.domain.exception.LivroEmUsoException;
 import com.librys.bibliotecalibrys.domain.exception.LivroNaoEncontradoException;
 import com.librys.bibliotecalibrys.domain.model.Livro;
 import com.librys.bibliotecalibrys.domain.repository.LivroRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 
@@ -49,9 +51,12 @@ public class CadastroLivroService {
         return livroRepository.save(livro);
     }
     public void excluir(Long livroId){
-        buscar(livroId);
-        livroRepository.deleteById(livroId);
-  
+        try {
+            buscar(livroId);
+            livroRepository.deleteById(livroId);
+        }catch(DataIntegrityViolationException e){
+            throw  new LivroEmUsoException(livroId);
+        }
     }
     public Livro atualizar(Long livroId, Livro livro){
         Livro livroPesquisado = buscar(livroId);

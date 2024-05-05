@@ -3,7 +3,7 @@ package com.librys.bibliotecalibrys.domain.exception;
 
 import com.librys.bibliotecalibrys.domain.model.Cliente;
 
-public class CpfEmUsoException extends  RuntimeException{
+public class CpfEmUsoException extends  EntidadeEmUsoException{
 
     private static final long serialVersionUID = 1L;
 
