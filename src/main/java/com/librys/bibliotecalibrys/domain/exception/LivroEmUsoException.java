@@ -13,7 +13,7 @@ public class LivroEmUsoException extends EntidadeEmUsoException{
         super(mensagem);
     }
 
-    public LivroEmUsoException(Livro livro) {
-        this(String.format("O livro '%d' está em uso", livro.getId()));
+    public LivroEmUsoException(Long livroId) {
+        this(String.format("O livro '%d' está alugado", livroId));
     }
 }

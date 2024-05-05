@@ -26,12 +26,10 @@ public class LivroAlugado {
     @ManyToOne
     private Cliente cliente;
 
-    @NotNull
     @Column(nullable = false)
     @CreationTimestamp
     private LocalDate dataLocacao;
 
-    @NotNull
     @Column(nullable = false)
     private LocalDate dataDevolucao;
 

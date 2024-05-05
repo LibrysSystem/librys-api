@@ -20,11 +20,27 @@ public class GerenciaLivroController {
         return gerenciaLivro.listar();
     }
 
-    @PostMapping
+    @GetMapping("/{livroAlugadoId}")
+    public LivroAlugado pesquisar(@PathVariable Long livroAlugadoId){
+        return gerenciaLivro.buscarId(livroAlugadoId);
+    }
+
+    @PostMapping("/alugar")
     @ResponseStatus(HttpStatus.CREATED)
     public LivroAlugado alugar(@RequestBody LivroAlugado livroAlugado){
         return gerenciaLivro.adicionar(livroAlugado);
 
+    }
+
+    @DeleteMapping("/devolver/{livroAlugadoId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void devolver(@PathVariable Long livroAlugadoId){
+        gerenciaLivro.excluir(livroAlugadoId);
+    }
+
+    @PutMapping("/renovar/{livroAlugadoId}")
+    public LivroAlugado renovar(@RequestBody LivroAlugado livroAlugado, @PathVariable Long livroAlugadoId){
+        return gerenciaLivro.atualizar(livroAlugado, livroAlugadoId);
     }
 
 }
