@@ -2,10 +2,14 @@ package com.librys.bibliotecalibrys.domain.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.librys.bibliotecalibrys.domain.exception.EntidadeNaoEncontradaException;
+import com.librys.bibliotecalibrys.domain.exception.LivroAlugadoNaoEncontradoException;
+import com.librys.bibliotecalibrys.domain.exception.NegocioClienteException;
+import com.librys.bibliotecalibrys.domain.exception.NegocioLivroException;
 import com.librys.bibliotecalibrys.domain.model.LivroAlugado;
 import com.librys.bibliotecalibrys.domain.repository.GerenciaLivroRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -20,11 +24,26 @@ public class GerenciaLivroService {
     @Autowired
     private GerenciaLivroRepository gerenciaLivroRepository;
 
+    public LivroAlugado buscarId(Long livroAlugadoId){
+        return gerenciaLivroRepository.findById(livroAlugadoId).orElseThrow(() -> new LivroAlugadoNaoEncontradoException(livroAlugadoId));
+    }
+
+    public LivroAlugado buscar(LivroAlugado gerenciaLivro){
+            gerenciaLivroRepository.findById(gerenciaLivro
+                    .getLivro().getId()).orElseThrow(()-> new NegocioLivroException(gerenciaLivro.getLivro().getId()));
+            gerenciaLivroRepository.findById(gerenciaLivro
+                    .getCliente().getId()).orElseThrow(() -> new NegocioClienteException(gerenciaLivro.getCliente().getId()));
+
+            return buscarId(gerenciaLivro.getId());
+    }
+
     public List<LivroAlugado> listar(){
         return gerenciaLivroRepository.findAll();
     }
 
     public LivroAlugado adicionar(LivroAlugado gerenciaLivro){
+        buscar(gerenciaLivro);
+
         return gerenciaLivroRepository.save(gerenciaLivro);
     }
 
