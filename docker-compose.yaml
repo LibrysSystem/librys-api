@@ -1,0 +1,31 @@
+services:
+    librys-api:
+                hostname: librys-api
+                container_name: librys-api
+                build:
+                    context: .
+                    dockerfile: Dockerfile
+                ports:
+                    - "8080:8080"
+                depends_on:
+                    librys-mysql:
+                        condition: service_healthy
+
+    librys-mysql:
+                hostname: librys-mysql
+                container_name: librys-mysql
+                image: mysql
+                environment:
+                    MYSQL_DATABASE: "biblioteca"
+                    MYSQL_ROOT_PASSWORD: "root"
+                ports:
+                    - "3316:3306"
+                healthcheck:
+                    test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+                    interval: 10s
+                    timeout: 5s
+                    retries: 5
+
+
+
+
