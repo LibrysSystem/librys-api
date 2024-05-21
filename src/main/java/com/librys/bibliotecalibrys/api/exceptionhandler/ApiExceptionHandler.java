@@ -7,6 +7,7 @@ import com.librys.bibliotecalibrys.domain.exception.CpfEmUsoException;
 import com.librys.bibliotecalibrys.domain.exception.EntidadeEmUsoException;
 import com.librys.bibliotecalibrys.domain.exception.EntidadeNaoEncontradaException;
 import com.librys.bibliotecalibrys.domain.exception.NegocioException;
+import com.librys.bibliotecalibrys.infrastructure.service.email.EmailException;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -150,6 +151,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         HttpStatus status = HttpStatus.CONFLICT;
         TipoProblema tipoProblema = TipoProblema.ENTIDADE_EM_USO;
+        String detalhe = ex.getMessage();
+
+        Problema problema = createProblemBuilder(status, tipoProblema, detalhe).build();
+
+        return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(EmailException.class)
+    public ResponseEntity<?> handleEmailNaoEnviado(EmailException ex, WebRequest request) {
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        TipoProblema tipoProblema = TipoProblema.DADOS_INVALIDOS;
         String detalhe = ex.getMessage();
 
         Problema problema = createProblemBuilder(status, tipoProblema, detalhe).build();

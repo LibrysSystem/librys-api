@@ -7,6 +7,7 @@ import com.librys.bibliotecalibrys.domain.model.LivroAlugado;
 import com.librys.bibliotecalibrys.domain.repository.ClienteRepository;
 import com.librys.bibliotecalibrys.domain.repository.GerenciaLivroRepository;
 import com.librys.bibliotecalibrys.domain.repository.LivroRepository;
+import com.librys.bibliotecalibrys.infrastructure.service.email.EmailException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,6 +36,9 @@ public class GerenciaLivroService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private EnvioEmailService envioEmail;
+
     public LivroAlugado buscarId(Long livroAlugadoId){
         return gerenciaLivroRepository.findById(livroAlugadoId).orElseThrow(() -> new LivroAlugadoNaoEncontradoException(livroAlugadoId));
     }
@@ -52,18 +56,47 @@ public class GerenciaLivroService {
             gerenciaLivro.setDataLocacao(LocalDate.now());
             gerenciaLivro.setDataDevolucao(LocalDate.now().plusDays(15));
 
-            return gerenciaLivroRepository.save(gerenciaLivro);
+            var mensagem = EnvioEmailService.Mensagem.builder()
+                    .assunto("Olá "+gerenciaLivro.getCliente().getNome()+"!")
+                    .corpo("livro-alugado.html")
+                    .variavel("aluguel", gerenciaLivro)
+                    .destinatario(gerenciaLivro.getCliente().getEmail())
+                    .build();
+
+            gerenciaLivro = gerenciaLivroRepository.save(gerenciaLivro);
+
+            envioEmail.enviar(mensagem);
+
+
+            return gerenciaLivro;
         } catch(DataIntegrityViolationException e){
             throw  new LivroEmUsoException(gerenciaLivro.getLivro().getId());
+        } catch (IllegalStateException e){
+            throw new EmailException(e.getMessage());
         }
     }
 
     public void excluir(Long gerenciaAlugarId){
-        LivroAlugado livroAlugado = buscarId(gerenciaAlugarId);
-            gerenciaLivroRepository.deleteById(gerenciaAlugarId);
-            Livro livro = cadastroLivro.buscar(livroAlugado.getLivro().getId());
-            livro.setAlugado(false);
-            cadastroLivro.atualizar(livro.getId(), livro);
+
+        LivroAlugado gerenciaLivro = buscarId(gerenciaAlugarId);
+        gerenciaLivroRepository.deleteById(gerenciaAlugarId);
+
+        Livro livro = cadastroLivro.buscar(gerenciaLivro.getLivro().getId());
+        livro.setAlugado(false);
+        cadastroLivro.atualizar(livro.getId(), livro);
+
+        try{
+            var mensagem = EnvioEmailService.Mensagem.builder()
+                    .assunto("Olá "+gerenciaLivro.getCliente().getNome()+"!")
+                    .corpo("livro-devolvido.html")
+                    .variavel("aluguel", gerenciaLivro)
+                    .destinatario(gerenciaLivro.getCliente().getEmail())
+                    .build();
+
+            envioEmail.enviar(mensagem);
+        } catch (IllegalStateException e){
+            throw new EmailException(e.getMessage());
+        }
 
     }
 
@@ -74,7 +107,22 @@ public class GerenciaLivroService {
         gerenciaLivro.setDataDevolucao(LocalDate.now().plusDays(15));
 
         BeanUtils.copyProperties(gerenciaLivro, livroAlugadoPesquisado, "id");
-        return gerenciaLivroRepository.save(livroAlugadoPesquisado);
+        gerenciaLivroRepository.save(livroAlugadoPesquisado);
+
+        try {
+            var mensagem = EnvioEmailService.Mensagem.builder()
+                    .assunto("Olá " + gerenciaLivro.getCliente().getNome() + "!")
+                    .corpo("livro-renovado.html")
+                    .variavel("aluguel", gerenciaLivro)
+                    .destinatario(gerenciaLivro.getCliente().getEmail())
+                    .build();
+
+            envioEmail.enviar(mensagem);
+        } catch (IllegalStateException e){
+            throw new EmailException(e.getMessage());
+        }
+
+        return livroAlugadoPesquisado;
     }
 
     public void buscar(LivroAlugado gerenciaLivro){
