@@ -35,6 +35,9 @@ public class GerenciaLivroService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private EnvioEmailService envioEmail;
+
     public LivroAlugado buscarId(Long livroAlugadoId){
         return gerenciaLivroRepository.findById(livroAlugadoId).orElseThrow(() -> new LivroAlugadoNaoEncontradoException(livroAlugadoId));
     }
@@ -52,19 +55,40 @@ public class GerenciaLivroService {
             gerenciaLivro.setDataLocacao(LocalDate.now());
             gerenciaLivro.setDataDevolucao(LocalDate.now().plusDays(15));
 
-            return gerenciaLivroRepository.save(gerenciaLivro);
+            var mensagem = EnvioEmailService.Mensagem.builder()
+                    .assunto("Olá "+gerenciaLivro.getCliente().getNome()+"!")
+                    .corpo("livro-alugado.html")
+                    .variavel("aluguel", gerenciaLivro)
+                    .destinatario(gerenciaLivro.getCliente().getEmail())
+                    .build();
+
+            gerenciaLivro = gerenciaLivroRepository.save(gerenciaLivro);
+
+            envioEmail.enviar(mensagem);
+
+
+            return gerenciaLivro;
         } catch(DataIntegrityViolationException e){
             throw  new LivroEmUsoException(gerenciaLivro.getLivro().getId());
         }
     }
 
     public void excluir(Long gerenciaAlugarId){
-        LivroAlugado livroAlugado = buscarId(gerenciaAlugarId);
+
+        LivroAlugado gerenciaLivro = buscarId(gerenciaAlugarId);
             gerenciaLivroRepository.deleteById(gerenciaAlugarId);
-            Livro livro = cadastroLivro.buscar(livroAlugado.getLivro().getId());
+            Livro livro = cadastroLivro.buscar(gerenciaLivro.getLivro().getId());
             livro.setAlugado(false);
             cadastroLivro.atualizar(livro.getId(), livro);
 
+        var mensagem = EnvioEmailService.Mensagem.builder()
+                .assunto("Olá "+gerenciaLivro.getCliente().getNome()+"!")
+                .corpo("livro-devolvido.html")
+                .variavel("aluguel", gerenciaLivro)
+                .destinatario(gerenciaLivro.getCliente().getEmail())
+                .build();
+
+        envioEmail.enviar(mensagem);
     }
 
     public LivroAlugado atualizar(LivroAlugado gerenciaLivro, Long livroId){
@@ -74,7 +98,18 @@ public class GerenciaLivroService {
         gerenciaLivro.setDataDevolucao(LocalDate.now().plusDays(15));
 
         BeanUtils.copyProperties(gerenciaLivro, livroAlugadoPesquisado, "id");
-        return gerenciaLivroRepository.save(livroAlugadoPesquisado);
+        gerenciaLivroRepository.save(livroAlugadoPesquisado);
+
+        var mensagem = EnvioEmailService.Mensagem.builder()
+                .assunto("Olá "+gerenciaLivro.getCliente().getNome()+"!")
+                .corpo("livro-renovado.html")
+                .variavel("aluguel", gerenciaLivro)
+                .destinatario(gerenciaLivro.getCliente().getEmail())
+                .build();
+
+        envioEmail.enviar(mensagem);
+
+        return livroAlugadoPesquisado;
     }
 
     public void buscar(LivroAlugado gerenciaLivro){
