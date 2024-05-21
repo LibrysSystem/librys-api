@@ -11,7 +11,7 @@ public class CpfEmUsoException extends  EntidadeEmUsoException{
         super(mensagem);
     }
 
-    public CpfEmUsoException(Cliente cliente) {
-        this(String.format("O CPF '%s' está em uso", cliente.getCpf()));
+    public CpfEmUsoException(Object object) {
+        this(String.format("O CPF '%s' está em uso", object.getClass()));
     }
 }

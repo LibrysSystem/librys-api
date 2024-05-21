@@ -2,6 +2,7 @@ package com.librys.bibliotecalibrys.api.controller;
 
 import com.librys.bibliotecalibrys.domain.model.LivroAlugado;
 import com.librys.bibliotecalibrys.domain.service.GerenciaLivroService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class GerenciaLivroController {
 
     @PostMapping("/alugar")
     @ResponseStatus(HttpStatus.CREATED)
-    public LivroAlugado alugar(@RequestBody LivroAlugado livroAlugado){
+    public LivroAlugado alugar(@RequestBody @Valid LivroAlugado livroAlugado){
         return gerenciaLivro.adicionar(livroAlugado);
 
     }
@@ -39,7 +40,7 @@ public class GerenciaLivroController {
     }
 
     @PutMapping("/renovar/{livroAlugadoId}")
-    public LivroAlugado renovar(@RequestBody LivroAlugado livroAlugado, @PathVariable Long livroAlugadoId){
+    public LivroAlugado renovar(@RequestBody @Valid LivroAlugado livroAlugado, @PathVariable Long livroAlugadoId){
         return gerenciaLivro.atualizar(livroAlugado, livroAlugadoId);
     }
 

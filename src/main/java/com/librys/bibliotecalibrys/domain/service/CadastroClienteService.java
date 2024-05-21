@@ -1,6 +1,7 @@
 package com.librys.bibliotecalibrys.domain.service;
 
 import com.librys.bibliotecalibrys.domain.exception.ClienteNaoEncontradoException;
+import com.librys.bibliotecalibrys.domain.exception.CpfClienteEmUsoException;
 import com.librys.bibliotecalibrys.domain.exception.CpfEmUsoException;
 import com.librys.bibliotecalibrys.domain.exception.LivroEmUsoException;
 import com.librys.bibliotecalibrys.domain.model.Cliente;
@@ -63,7 +64,7 @@ public class CadastroClienteService {
         List<Cliente> cpfPesquisado = clienteRepository.findByCpfContainingIgnoreCase(cliente.getCpf());
 
         if (!cpfPesquisado.isEmpty()) {
-            throw new CpfEmUsoException(cliente);
+            throw new CpfClienteEmUsoException(cliente);
         }
 
         return clienteRepository.save(cliente);

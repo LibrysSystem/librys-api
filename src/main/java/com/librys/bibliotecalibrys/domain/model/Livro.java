@@ -46,6 +46,8 @@ public class Livro {
 	@NotNull
 	@Column(name = "livro_alugado", nullable = false)
 	private boolean isAlugado;
+
+	private String imagemUrl;
 	
 
 }
