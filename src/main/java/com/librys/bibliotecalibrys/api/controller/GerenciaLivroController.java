@@ -15,7 +15,7 @@ public class GerenciaLivroController {
 
     @Autowired
     private GerenciaLivroService gerenciaLivro;
-
+    
     @GetMapping
     public List<LivroAlugado> exibir(){
         return gerenciaLivro.listar();
@@ -40,8 +40,8 @@ public class GerenciaLivroController {
     }
 
     @PutMapping("/renovar/{livroAlugadoId}")
-    public LivroAlugado renovar(@RequestBody @Valid LivroAlugado livroAlugado, @PathVariable Long livroAlugadoId){
-        return gerenciaLivro.atualizar(livroAlugado, livroAlugadoId);
+    public LivroAlugado renovar(@PathVariable Long livroAlugadoId){
+        return gerenciaLivro.atualizar(livroAlugadoId);
     }
 
 }

@@ -33,6 +33,4 @@ public class LivroAlugado {
     @Column(nullable = false)
     private LocalDate dataDevolucao;
 
-    private String codigoFiscal;
-
 }

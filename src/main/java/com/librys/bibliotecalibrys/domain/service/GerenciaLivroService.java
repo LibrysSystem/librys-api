@@ -100,21 +100,20 @@ public class GerenciaLivroService {
 
     }
 
-    public LivroAlugado atualizar(LivroAlugado gerenciaLivro, Long livroId){
+    public LivroAlugado atualizar(Long livroId){
         LivroAlugado livroAlugadoPesquisado = buscarId(livroId);
 
-        gerenciaLivro.setDataLocacao(LocalDate.now());
-        gerenciaLivro.setDataDevolucao(LocalDate.now().plusDays(15));
+        livroAlugadoPesquisado.setDataLocacao(LocalDate.now());
+        livroAlugadoPesquisado.setDataDevolucao(LocalDate.now().plusDays(15));
 
-        BeanUtils.copyProperties(gerenciaLivro, livroAlugadoPesquisado, "id");
         gerenciaLivroRepository.save(livroAlugadoPesquisado);
 
         try {
             var mensagem = EnvioEmailService.Mensagem.builder()
-                    .assunto("Olá " + gerenciaLivro.getCliente().getNome() + "!")
+                    .assunto("Olá " + livroAlugadoPesquisado.getCliente().getNome() + "!")
                     .corpo("livro-renovado.html")
-                    .variavel("aluguel", gerenciaLivro)
-                    .destinatario(gerenciaLivro.getCliente().getEmail())
+                    .variavel("aluguel", livroAlugadoPesquisado)
+                    .destinatario(livroAlugadoPesquisado.getCliente().getEmail())
                     .build();
 
             envioEmail.enviar(mensagem);
