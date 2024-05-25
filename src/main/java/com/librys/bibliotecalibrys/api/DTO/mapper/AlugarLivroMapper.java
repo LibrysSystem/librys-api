@@ -7,9 +7,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Component
 public class AlugarLivroMapper {
 
@@ -17,18 +14,11 @@ public class AlugarLivroMapper {
     private ModelMapper mapper;
 
     public LivroAlugado toEntity(AlugarLivroDTO alugarLivroDTO){
-        LivroAlugado entity = mapper.map(alugarLivroDTO, LivroAlugado.class);
-        return entity;
+        return mapper.map(alugarLivroDTO, LivroAlugado.class);
     }
 
     public AlugarLivroResponseDTO toDTO(LivroAlugado entity){
-        AlugarLivroResponseDTO alugarLivroResponseDTO = mapper.map(entity, AlugarLivroResponseDTO.class);
-        return alugarLivroResponseDTO;
+        return mapper.map(entity, AlugarLivroResponseDTO.class);
     }
 
-    public List<AlugarLivroResponseDTO> toDTO(List<LivroAlugado> livroAlugados){
-        return livroAlugados.stream()
-                .map(this::toDTO)
-                .collect(Collectors.toList());
-    }
 }
