@@ -1,26 +1,22 @@
 package com.librys.bibliotecalibrys.domain.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.librys.bibliotecalibrys.api.DTO.AlugarLivroDTO;
+import com.librys.bibliotecalibrys.api.DTO.AlugarLivroResponseDTO;
+import com.librys.bibliotecalibrys.api.DTO.mapper.AlugarLivroMapper;
 import com.librys.bibliotecalibrys.domain.exception.*;
+import com.librys.bibliotecalibrys.domain.model.Cliente;
 import com.librys.bibliotecalibrys.domain.model.Livro;
 import com.librys.bibliotecalibrys.domain.model.LivroAlugado;
 import com.librys.bibliotecalibrys.domain.repository.ClienteRepository;
 import com.librys.bibliotecalibrys.domain.repository.GerenciaLivroRepository;
 import com.librys.bibliotecalibrys.domain.repository.LivroRepository;
 import com.librys.bibliotecalibrys.infrastructure.service.email.EmailException;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 @Service
 public class GerenciaLivroService {
 
@@ -39,6 +35,9 @@ public class GerenciaLivroService {
     @Autowired
     private EnvioEmailService envioEmail;
 
+    @Autowired
+    private AlugarLivroMapper mapper;
+
     public LivroAlugado buscarId(Long livroAlugadoId){
         return gerenciaLivroRepository.findById(livroAlugadoId).orElseThrow(() -> new LivroAlugadoNaoEncontradoException(livroAlugadoId));
     }
@@ -47,12 +46,21 @@ public class GerenciaLivroService {
         return gerenciaLivroRepository.findAll();
     }
 
-    public LivroAlugado adicionar(LivroAlugado gerenciaLivro){
-        buscar(gerenciaLivro);
+    public AlugarLivroResponseDTO adicionar(AlugarLivroDTO alugarLivroDTO){
+
+        LivroAlugado gerenciaLivro = mapper.toEntity(alugarLivroDTO);
+
+        Livro livro = livroRepository.findById(alugarLivroDTO.getLivroId())
+                .orElseThrow(() -> new LivroNaoEncontradoException(alugarLivroDTO.getLivroId()));
+        Cliente cliente = clienteRepository.findById(alugarLivroDTO.getClienteId())
+                .orElseThrow(() -> new ClienteNaoEncontradoException(alugarLivroDTO.getClienteId()));
+
         try{
-            Livro livro = cadastroLivro.buscar(gerenciaLivro.getLivro().getId());
             livro.setAlugado(true);
             cadastroLivro.atualizar(livro.getId(), livro);
+
+            gerenciaLivro.setLivro(livro);
+            gerenciaLivro.setCliente(cliente);
             gerenciaLivro.setDataLocacao(LocalDate.now());
             gerenciaLivro.setDataDevolucao(LocalDate.now().plusDays(15));
 
@@ -67,8 +75,8 @@ public class GerenciaLivroService {
 
             envioEmail.enviar(mensagem);
 
+            return mapper.toDTO(gerenciaLivro);
 
-            return gerenciaLivro;
         } catch(DataIntegrityViolationException e){
             throw  new LivroEmUsoException(gerenciaLivro.getLivro().getId());
         } catch (IllegalStateException e){
