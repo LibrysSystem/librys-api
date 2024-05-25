@@ -1,8 +1,9 @@
 package com.librys.bibliotecalibrys.api.controller;
 
+import com.librys.bibliotecalibrys.api.DTO.AlugarLivroDTO;
+import com.librys.bibliotecalibrys.api.DTO.AlugarLivroResponseDTO;
 import com.librys.bibliotecalibrys.domain.model.LivroAlugado;
 import com.librys.bibliotecalibrys.domain.service.GerenciaLivroService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +29,8 @@ public class GerenciaLivroController {
 
     @PostMapping("/alugar")
     @ResponseStatus(HttpStatus.CREATED)
-    public LivroAlugado alugar(@RequestBody @Valid LivroAlugado livroAlugado){
-        return gerenciaLivro.adicionar(livroAlugado);
-
+    public AlugarLivroResponseDTO alugar(@RequestBody AlugarLivroDTO alugarLivroDTO){
+        return gerenciaLivro.adicionar(alugarLivroDTO);
     }
 
     @DeleteMapping("/devolver/{livroAlugadoId}")
