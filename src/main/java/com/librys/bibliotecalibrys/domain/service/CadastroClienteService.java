@@ -81,7 +81,7 @@ public class CadastroClienteService {
         Cliente clienteAtual = buscar(clinteId);
         BeanUtils.copyProperties(cliente, clienteAtual, "id");
 
-        return  adicionar(clienteAtual);
+        return  clienteRepository.save(clienteAtual);
     }
 
 }

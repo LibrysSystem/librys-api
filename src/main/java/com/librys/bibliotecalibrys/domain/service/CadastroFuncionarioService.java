@@ -73,7 +73,7 @@ public class CadastroFuncionarioService {
         Funcionario funcionarioPesquisado = buscar(funcionarioId);
 
         BeanUtils.copyProperties(funcionario, funcionarioPesquisado, "id");
-        return adicionar(funcionarioPesquisado);
+        return funcionarioRepository.save(funcionarioPesquisado);
     }
 
     public void excluir(Long funcionarioId){
