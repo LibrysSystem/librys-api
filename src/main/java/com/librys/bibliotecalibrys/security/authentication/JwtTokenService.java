@@ -1,4 +1,4 @@
-package com.librys.bibliotecalibrys.security.jwt;
+package com.librys.bibliotecalibrys.security.authentication;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -7,11 +7,9 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.librys.bibliotecalibrys.security.userdetails.UserDetailsImpl;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.Subject;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Date;
 
 @Service
 public class JwtTokenService {
