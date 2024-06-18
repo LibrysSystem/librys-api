@@ -1,0 +1,16 @@
+package com.librys.bibliotecalibrys.domain.repository;
+
+import com.librys.bibliotecalibrys.domain.model.Usuario;
+import org.apache.catalina.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+
+    Optional<Usuario> findByEmail(String email);
+
+
+}
