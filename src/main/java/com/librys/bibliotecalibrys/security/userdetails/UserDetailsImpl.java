@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails{
 
-    private Usuario usuario;
+    private final Usuario usuario;
 
     public UserDetailsImpl(Usuario usuario) {
         this.usuario = usuario;
@@ -21,10 +21,7 @@ public class UserDetailsImpl implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return usuario.getRoles()
-                .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-                .collect(Collectors.toList());
+        return List.of(() -> "read");
     }
 
     @Override
