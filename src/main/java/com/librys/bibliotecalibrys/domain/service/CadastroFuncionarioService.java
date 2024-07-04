@@ -1,23 +1,24 @@
 package com.librys.bibliotecalibrys.domain.service;
 
-import com.librys.bibliotecalibrys.domain.exception.ClienteNaoEncontradoException;
-import com.librys.bibliotecalibrys.domain.exception.CpfEmUsoException;
 import com.librys.bibliotecalibrys.domain.exception.CpfFuncionarioEmUsoException;
 import com.librys.bibliotecalibrys.domain.exception.FuncionarioNaoEncontradoException;
-import com.librys.bibliotecalibrys.domain.model.Cliente;
+import com.librys.bibliotecalibrys.domain.exception.LoginJaRegistrado;
 import com.librys.bibliotecalibrys.domain.model.Funcionario;
 import com.librys.bibliotecalibrys.domain.repository.FuncionarioRepository;
+import com.librys.bibliotecalibrys.domain.repository.UsuarioRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CadastroFuncionarioService {
 
-    @Autowired
-    private FuncionarioRepository funcionarioRepository;
+    private final FuncionarioRepository funcionarioRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final UsuarioService usuarioService;
 
     public List<Funcionario> listar(){
         return funcionarioRepository.findAll();
@@ -65,19 +66,27 @@ public class CadastroFuncionarioService {
             throw new CpfFuncionarioEmUsoException(funcionario);
         }
 
-        return funcionarioRepository.save(funcionario);
+        if(usuarioRepository.findByEmail(funcionario.getEmail()).isPresent()){
+            throw new LoginJaRegistrado("O login desse funcionário já está registrado.");
+        }
 
+        usuarioService.registrarLogin(funcionario);
+
+        return funcionarioRepository.save(funcionario);
     }
 
     public Funcionario atualizar(Funcionario funcionario, Long funcionarioId){
         Funcionario funcionarioPesquisado = buscar(funcionarioId);
 
         BeanUtils.copyProperties(funcionario, funcionarioPesquisado, "id");
+        usuarioService.atualizarSenha(funcionario);
+
         return funcionarioRepository.save(funcionarioPesquisado);
     }
 
     public void excluir(Long funcionarioId){
         Funcionario funcionarioPesquisado = buscar(funcionarioId);
         funcionarioRepository.deleteById(funcionarioPesquisado.getId());
+        usuarioService.deletar(funcionarioPesquisado);
     }
 }

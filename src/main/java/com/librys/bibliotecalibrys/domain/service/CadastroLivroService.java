@@ -1,8 +1,5 @@
 package com.librys.bibliotecalibrys.domain.service;
 
-import java.util.List;
-
-import com.librys.bibliotecalibrys.domain.exception.ClienteNaoEncontradoException;
 import com.librys.bibliotecalibrys.domain.exception.LivroEmUsoException;
 import com.librys.bibliotecalibrys.domain.exception.LivroNaoEncontradoException;
 import com.librys.bibliotecalibrys.domain.model.Livro;
@@ -12,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-
+import java.util.List;
 
 @Service
 public class CadastroLivroService {

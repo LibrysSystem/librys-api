@@ -1,6 +1,5 @@
 package com.librys.bibliotecalibrys.domain.exception;
 
-import com.librys.bibliotecalibrys.domain.model.Cliente;
 import com.librys.bibliotecalibrys.domain.model.Funcionario;
 
 public class CpfFuncionarioEmUsoException extends CpfEmUsoException{

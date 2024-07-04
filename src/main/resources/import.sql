@@ -12,3 +12,5 @@ insert into livro_alugado(id, livro_id, cliente_id, data_locacao, data_devolucao
 
 insert into funcionario(id, nome, cpf,data_nascimento, email, senha, celular, endereco) values (1, "Maria Nayra", "123456789-10", utc_timestamp, "marianayra@gmail.com", "1234", "33410032", "rua alguma");
 insert into funcionario(id, nome, cpf,data_nascimento, email, senha, celular, endereco) values (2, "Maria Leticia", "987654321-10", utc_timestamp, "marialeticia@gmail.com", "4321", "33410032", "rua alguma");
+
+insert into usuarios(id, email, password) values (1, 'admin', 'ksdfjsdfh485y34ufrnwe');
