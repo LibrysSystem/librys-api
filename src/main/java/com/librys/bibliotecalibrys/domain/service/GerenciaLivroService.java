@@ -1,9 +1,10 @@
 package com.librys.bibliotecalibrys.domain.service;
 
-import com.librys.bibliotecalibrys.domain.exception.LivroAlugadoNaoEncontradoException;
-import com.librys.bibliotecalibrys.domain.exception.LivroEmUsoException;
-import com.librys.bibliotecalibrys.domain.exception.NegocioClienteException;
-import com.librys.bibliotecalibrys.domain.exception.NegocioLivroException;
+import com.librys.bibliotecalibrys.api.DTO.AlugarLivroDTO;
+import com.librys.bibliotecalibrys.api.DTO.AlugarLivroResponseDTO;
+import com.librys.bibliotecalibrys.api.DTO.mapper.AlugarLivroMapper;
+import com.librys.bibliotecalibrys.domain.exception.*;
+import com.librys.bibliotecalibrys.domain.model.Cliente;
 import com.librys.bibliotecalibrys.domain.model.Livro;
 import com.librys.bibliotecalibrys.domain.model.LivroAlugado;
 import com.librys.bibliotecalibrys.domain.repository.ClienteRepository;
