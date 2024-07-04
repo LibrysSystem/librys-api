@@ -22,10 +22,11 @@ public class DatabaseSeeder {
     }
 
     void seedSave(){
-        Usuario usuario = new Usuario();
-        usuario.setEmail("admin");
-        usuario.setPassword("$2a$12$Uq6x7EotWOfX.MRo46KkS.hfoEGCEW0kZl1TG6q0aM9ZuThn9mtmq");
-        usuario.setRole(RoleName.ROLE_SUPORTE);
+        Usuario usuario = Usuario.builder()
+                .email("admin")
+                .password("$2a$12$fEAJYJI9PuvQaaSgQlI.SeKkg0V/fZv4UiS.GUkebQUUeCI8sTXo.")
+                .role(RoleName.SUPORTE).
+                build();
         usuarioRepository.save(usuario);
     }
 }

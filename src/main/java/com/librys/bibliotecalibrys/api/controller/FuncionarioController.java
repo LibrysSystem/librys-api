@@ -1,6 +1,5 @@
 package com.librys.bibliotecalibrys.api.controller;
 
-import com.librys.bibliotecalibrys.domain.model.Cliente;
 import com.librys.bibliotecalibrys.domain.model.Funcionario;
 import com.librys.bibliotecalibrys.domain.service.CadastroFuncionarioService;
 import jakarta.validation.Valid;
