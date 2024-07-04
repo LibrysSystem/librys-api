@@ -2,8 +2,10 @@ package com.librys.bibliotecalibrys.domain.service;
 
 import com.librys.bibliotecalibrys.domain.exception.CpfFuncionarioEmUsoException;
 import com.librys.bibliotecalibrys.domain.exception.FuncionarioNaoEncontradoException;
+import com.librys.bibliotecalibrys.domain.exception.LoginJaRegistrado;
 import com.librys.bibliotecalibrys.domain.model.Funcionario;
 import com.librys.bibliotecalibrys.domain.repository.FuncionarioRepository;
+import com.librys.bibliotecalibrys.domain.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,7 @@ import java.util.List;
 public class CadastroFuncionarioService {
 
     private final FuncionarioRepository funcionarioRepository;
-
+    private final UsuarioRepository usuarioRepository;
     private final UsuarioService usuarioService;
 
     public List<Funcionario> listar(){
@@ -64,11 +66,11 @@ public class CadastroFuncionarioService {
             throw new CpfFuncionarioEmUsoException(funcionario);
         }
 
-        try {
-            usuarioService.registrarLogin(funcionario);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if(usuarioRepository.findByEmail(funcionario.getEmail()).isPresent()){
+            throw new LoginJaRegistrado("O login desse funcionário já está registrado.");
         }
+
+        usuarioService.registrarLogin(funcionario);
 
         return funcionarioRepository.save(funcionario);
     }
@@ -77,7 +79,9 @@ public class CadastroFuncionarioService {
         Funcionario funcionarioPesquisado = buscar(funcionarioId);
 
         BeanUtils.copyProperties(funcionario, funcionarioPesquisado, "id");
-        return adicionar(funcionarioPesquisado);
+        usuarioService.atualizarSenha(funcionario);
+
+        return funcionarioRepository.save(funcionarioPesquisado);
     }
 
     public void excluir(Long funcionarioId){

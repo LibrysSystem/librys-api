@@ -5,6 +5,7 @@ import com.librys.bibliotecalibrys.domain.model.Usuario;
 import com.librys.bibliotecalibrys.domain.repository.UsuarioRepository;
 import com.librys.bibliotecalibrys.enums.RoleName;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,14 @@ public class UsuarioService {
     public void deletar(Funcionario funcionario){
         Usuario usuario = usuarioRepository.findUsuarioByEmail(funcionario.getEmail());
         usuarioRepository.delete(usuario);
+    }
+
+    public void atualizarSenha(Funcionario funcionario){
+        Usuario funcionarioAtual = usuarioRepository.findUsuarioByEmail(funcionario.getEmail());
+        if(!funcionarioAtual.getPassword().equals(funcionario.getSenha())){
+            BeanUtils.copyProperties(funcionario, funcionarioAtual);
+            registrarLogin(funcionario);
+        }
     }
 
     private Usuario buildUser(String email, String password, RoleName role){

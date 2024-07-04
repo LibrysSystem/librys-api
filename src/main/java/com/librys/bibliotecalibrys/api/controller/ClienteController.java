@@ -1,6 +1,5 @@
 package com.librys.bibliotecalibrys.api.controller;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.librys.bibliotecalibrys.domain.model.Cliente;
 import com.librys.bibliotecalibrys.domain.service.CadastroClienteService;
 import jakarta.validation.Valid;

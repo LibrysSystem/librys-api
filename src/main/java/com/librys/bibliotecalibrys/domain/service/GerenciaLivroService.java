@@ -1,25 +1,21 @@
 package com.librys.bibliotecalibrys.domain.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.librys.bibliotecalibrys.domain.exception.*;
+import com.librys.bibliotecalibrys.domain.exception.LivroAlugadoNaoEncontradoException;
+import com.librys.bibliotecalibrys.domain.exception.LivroEmUsoException;
+import com.librys.bibliotecalibrys.domain.exception.NegocioClienteException;
+import com.librys.bibliotecalibrys.domain.exception.NegocioLivroException;
 import com.librys.bibliotecalibrys.domain.model.Livro;
 import com.librys.bibliotecalibrys.domain.model.LivroAlugado;
 import com.librys.bibliotecalibrys.domain.repository.ClienteRepository;
 import com.librys.bibliotecalibrys.domain.repository.GerenciaLivroRepository;
 import com.librys.bibliotecalibrys.domain.repository.LivroRepository;
 import com.librys.bibliotecalibrys.infrastructure.service.email.EmailException;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class GerenciaLivroService {
@@ -131,5 +127,4 @@ public class GerenciaLivroService {
                 .getCliente().getId()).orElseThrow(() -> new NegocioClienteException(gerenciaLivro.getCliente().getId()));
 
     }
-
 }
