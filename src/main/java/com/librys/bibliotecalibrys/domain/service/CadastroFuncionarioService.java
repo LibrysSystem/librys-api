@@ -1,5 +1,7 @@
 package com.librys.bibliotecalibrys.domain.service;
 
+import com.librys.bibliotecalibrys.api.DTO.FuncionarioDTO;
+import com.librys.bibliotecalibrys.api.DTO.mapper.FuncionarioMapper;
 import com.librys.bibliotecalibrys.domain.exception.CpfFuncionarioEmUsoException;
 import com.librys.bibliotecalibrys.domain.exception.FuncionarioNaoEncontradoException;
 import com.librys.bibliotecalibrys.domain.exception.LoginJaRegistrado;
@@ -10,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,45 +20,56 @@ import java.util.List;
 public class CadastroFuncionarioService {
 
     private final FuncionarioRepository funcionarioRepository;
+    private final FuncionarioMapper mapper;
     private final UsuarioRepository usuarioRepository;
     private final UsuarioService usuarioService;
 
-    public List<Funcionario> listar(){
-        return funcionarioRepository.findAll();
+    public List<FuncionarioDTO> listar(){
+        List<Funcionario> listaFuncionario = new ArrayList<>();
+        listaFuncionario = funcionarioRepository.findAll();
+        return listaFuncionario.stream()
+                .map(mapper::toDTO)
+                .toList();
     }
 
-    public Funcionario buscar(Long funcionarioId){
-        return funcionarioRepository.findById(funcionarioId).orElseThrow(() -> new FuncionarioNaoEncontradoException(funcionarioId));
+    public FuncionarioDTO buscar(Long funcionarioId){
+        return mapper.toDTO(funcionarioRepository.findById(funcionarioId).orElseThrow(() -> new FuncionarioNaoEncontradoException(funcionarioId)));
     }
 
-    public List<Funcionario> buscarPorNome(String nome){
+    public List<FuncionarioDTO> buscarPorNome(String nome){
         List<Funcionario> nomePesquisado = funcionarioRepository.findByNomeContainingIgnoreCase(nome);
 
         if(nomePesquisado.isEmpty()){
             throw new FuncionarioNaoEncontradoException("Funcionário não encontrado.");
         }
 
-        return nomePesquisado;
+        return nomePesquisado.stream()
+                .map(mapper::toDTO)
+                .toList();
     }
 
-    public List<Funcionario> buscarPorCpf(String cpf){
+    public List<FuncionarioDTO> buscarPorCpf(String cpf){
         List<Funcionario> cpfPesquisado = funcionarioRepository.findByCpfContainingIgnoreCase(cpf);
 
         if(cpfPesquisado.isEmpty()){
             throw new FuncionarioNaoEncontradoException("Funcionário não encontrado.");
         }
 
-        return cpfPesquisado;
+        return cpfPesquisado.stream()
+                .map(mapper::toDTO)
+                .toList();
     }
 
-    public List<Funcionario> buscarPorEmail(String email){
+    public List<FuncionarioDTO> buscarPorEmail(String email){
         List<Funcionario> emailPesquisado = funcionarioRepository.findByEmailContainingIgnoreCase(email);
 
         if(emailPesquisado.isEmpty()){
             throw new FuncionarioNaoEncontradoException("Funcionário não encontrado.");
         }
 
-        return emailPesquisado;
+        return emailPesquisado.stream()
+                .map(mapper::toDTO)
+                .toList();
     }
 
     public Funcionario adicionar(Funcionario funcionario){
@@ -76,17 +90,17 @@ public class CadastroFuncionarioService {
     }
 
     public Funcionario atualizar(Funcionario funcionario, Long funcionarioId){
-        Funcionario funcionarioPesquisado = buscar(funcionarioId);
+        FuncionarioDTO funcionarioPesquisado = buscar(funcionarioId);
 
         BeanUtils.copyProperties(funcionario, funcionarioPesquisado, "id");
         usuarioService.atualizarSenha(funcionario);
 
-        return funcionarioRepository.save(funcionarioPesquisado);
+        return funcionarioRepository.save(mapper.toEntity(funcionarioPesquisado));
     }
 
     public void excluir(Long funcionarioId){
-        Funcionario funcionarioPesquisado = buscar(funcionarioId);
+        FuncionarioDTO funcionarioPesquisado = buscar(funcionarioId);
         funcionarioRepository.deleteById(funcionarioPesquisado.getId());
-        usuarioService.deletar(funcionarioPesquisado);
+        usuarioService.deletar(mapper.toEntity(funcionarioPesquisado));
     }
 }
