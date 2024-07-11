@@ -1,5 +1,6 @@
 package com.librys.bibliotecalibrys.api.controller;
 
+import com.librys.bibliotecalibrys.api.DTO.FuncionarioDTO;
 import com.librys.bibliotecalibrys.domain.model.Funcionario;
 import com.librys.bibliotecalibrys.domain.service.CadastroFuncionarioService;
 import jakarta.validation.Valid;
@@ -16,28 +17,28 @@ public class FuncionarioController {
     private CadastroFuncionarioService cadastroFuncionario;
 
     @GetMapping
-    public List<Funcionario> exibir(){
+    public List<FuncionarioDTO> exibir(){
         return cadastroFuncionario.listar();
     }
 
     @GetMapping("/{funcionarioId}")
-    public Funcionario pesquisar(@PathVariable Long funcionarioId){
+    public FuncionarioDTO pesquisar(@PathVariable Long funcionarioId){
         return cadastroFuncionario.buscar(funcionarioId);
     }
 
 
     @GetMapping("/por-nome")
-    public List<Funcionario> pesquisarPorNome(@RequestParam String nome){
+    public List<FuncionarioDTO> pesquisarPorNome(@RequestParam String nome){
         return cadastroFuncionario.buscarPorNome(nome);
     }
 
     @GetMapping("/por-cpf")
-    public List<Funcionario> pesquisarPorCpf(@RequestParam String cpf){
+    public List<FuncionarioDTO> pesquisarPorCpf(@RequestParam String cpf){
         return cadastroFuncionario.buscarPorCpf(cpf);
     }
 
     @GetMapping("/por-email")
-    public List<Funcionario> pesquisarPorEmail(@RequestParam String email){
+    public List<FuncionarioDTO> pesquisarPorEmail(@RequestParam String email){
         return cadastroFuncionario.buscarPorEmail(email);
     }
 
