@@ -1,5 +1,6 @@
 package com.librys.bibliotecalibrys.domain.service;
 
+import com.librys.bibliotecalibrys.domain.exception.ClienteEmUsoException;
 import com.librys.bibliotecalibrys.domain.exception.ClienteNaoEncontradoException;
 import com.librys.bibliotecalibrys.domain.exception.CpfClienteEmUsoException;
 import com.librys.bibliotecalibrys.domain.exception.LivroEmUsoException;
@@ -76,7 +77,7 @@ public class CadastroClienteService {
         try {
             clienteRepository.deleteById(clienteId);
         } catch(DataIntegrityViolationException e){
-            throw  new LivroEmUsoException(clienteId);
+            throw  new ClienteEmUsoException(clienteId);
         }
     }
 
