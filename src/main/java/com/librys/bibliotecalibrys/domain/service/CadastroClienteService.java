@@ -2,10 +2,12 @@ package com.librys.bibliotecalibrys.domain.service;
 
 import com.librys.bibliotecalibrys.domain.exception.ClienteNaoEncontradoException;
 import com.librys.bibliotecalibrys.domain.exception.CpfClienteEmUsoException;
+import com.librys.bibliotecalibrys.domain.exception.LivroEmUsoException;
 import com.librys.bibliotecalibrys.domain.model.Cliente;
 import com.librys.bibliotecalibrys.domain.repository.ClienteRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -70,7 +72,12 @@ public class CadastroClienteService {
 
     public void excluir(Long clienteId){
         Cliente clienteProcurado = clienteRepository.findById(clienteId).orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado."));
-        clienteRepository.deleteById(clienteId);
+
+        try {
+            clienteRepository.deleteById(clienteId);
+        } catch(DataIntegrityViolationException e){
+            throw  new LivroEmUsoException(clienteId);
+        }
     }
 
     public Cliente atualizar(Long clinteId, Cliente cliente){
