@@ -70,7 +70,7 @@ public class CadastroClienteService {
 
     public void excluir(Long clienteId){
         Cliente clienteProcurado = clienteRepository.findById(clienteId).orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado."));
-        clienteRepository.deleteById(clienteProcurado.getId());
+        clienteRepository.deleteById(clienteId);
     }
 
     public Cliente atualizar(Long clinteId, Cliente cliente){
