@@ -2,6 +2,7 @@ package com.librys.bibliotecalibrys.api.controller;
 
 import com.librys.bibliotecalibrys.domain.model.Funcionario;
 import com.librys.bibliotecalibrys.domain.model.Usuario;
+import com.librys.bibliotecalibrys.domain.model.UsuarioDTO;
 import com.librys.bibliotecalibrys.domain.repository.UsuarioRepository;
 import com.librys.bibliotecalibrys.domain.service.UsuarioService;
 import com.librys.bibliotecalibrys.security.authentication.AuthenticationService;
@@ -23,7 +24,7 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @PostMapping("/login")
-    public String authenticate(Authentication authentication){
+    public UsuarioDTO authenticate(Authentication authentication){
         return authenticationService.authenticate(authentication);
     }
 
