@@ -35,7 +35,7 @@ public class UsuarioService {
     public void atualizarSenha(Funcionario funcionario){
         Usuario funcionarioAtual = usuarioRepository.findUsuarioByEmail(funcionario.getEmail());
         if(!funcionarioAtual.getPassword().equals(funcionario.getSenha())){
-            BeanUtils.copyProperties(funcionario, funcionarioAtual);
+            BeanUtils.copyProperties(funcionario.getSenha(), funcionarioAtual.getPassword(), "id");
             registrarLogin(funcionario);
         }
     }

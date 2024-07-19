@@ -72,7 +72,7 @@ public class CadastroFuncionarioService {
                 .toList();
     }
 
-    public Funcionario adicionar(Funcionario funcionario){
+    public FuncionarioDTO adicionar(Funcionario funcionario){
 
         List<Funcionario> cpfPesquisado = funcionarioRepository.findByCpfContainingIgnoreCase(funcionario.getCpf());
 
@@ -85,22 +85,25 @@ public class CadastroFuncionarioService {
         }
 
         usuarioService.registrarLogin(funcionario);
+        funcionarioRepository.save(funcionario);
 
-        return funcionarioRepository.save(funcionario);
+        return mapper.toDTO(funcionario);
     }
 
-    public Funcionario atualizar(Funcionario funcionario, Long funcionarioId){
-        FuncionarioDTO funcionarioPesquisado = buscar(funcionarioId);
+    public FuncionarioDTO atualizar(Funcionario funcionario){
+        Funcionario funcionarioPesquisado = funcionarioRepository.findById(funcionario.getId()).orElseThrow();
 
         BeanUtils.copyProperties(funcionario, funcionarioPesquisado, "id");
-        usuarioService.atualizarSenha(funcionario);
+        usuarioService.atualizarSenha(funcionarioPesquisado);
 
-        return funcionarioRepository.save(mapper.toEntity(funcionarioPesquisado));
+        funcionarioRepository.save(funcionarioPesquisado);
+
+        return mapper.toDTO(funcionarioPesquisado);
     }
 
     public void excluir(Long funcionarioId){
-        FuncionarioDTO funcionarioPesquisado = buscar(funcionarioId);
-        funcionarioRepository.deleteById(funcionarioPesquisado.getId());
-        usuarioService.deletar(mapper.toEntity(funcionarioPesquisado));
+        Funcionario funcionario = funcionarioRepository.findById(funcionarioId).orElseThrow();
+        funcionarioRepository.deleteById(funcionarioId);
+        usuarioService.deletar(funcionario);
     }
 }
