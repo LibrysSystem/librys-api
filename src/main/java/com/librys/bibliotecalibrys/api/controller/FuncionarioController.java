@@ -43,13 +43,13 @@ public class FuncionarioController {
     }
 
     @PostMapping
-    public Funcionario salvar(@RequestBody @Valid Funcionario funcionario){
+    public FuncionarioDTO salvar(@RequestBody @Valid Funcionario funcionario){
         return cadastroFuncionario.adicionar(funcionario);
     }
 
-    @PutMapping("/{funcionarioId}")
-    public Funcionario editar(@RequestBody @Valid Funcionario funcionario, @PathVariable Long funcionarioId){
-        return cadastroFuncionario.atualizar(funcionario, funcionarioId);
+    @PutMapping
+    public FuncionarioDTO editar(@RequestBody @Valid Funcionario funcionario){
+        return cadastroFuncionario.atualizar(funcionario);
     }
 
     @DeleteMapping("/{funcionarioId}")
