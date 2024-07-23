@@ -3,11 +3,11 @@ package com.librys.bibliotecalibrys.domain.service;
 import com.librys.bibliotecalibrys.domain.exception.ClienteEmUsoException;
 import com.librys.bibliotecalibrys.domain.exception.ClienteNaoEncontradoException;
 import com.librys.bibliotecalibrys.domain.exception.CpfClienteEmUsoException;
-import com.librys.bibliotecalibrys.domain.exception.LivroEmUsoException;
 import com.librys.bibliotecalibrys.domain.model.Cliente;
 import com.librys.bibliotecalibrys.domain.repository.ClienteRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
