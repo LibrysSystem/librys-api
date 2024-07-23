@@ -23,8 +23,8 @@ public class DatabaseSeeder {
 
     void seedSave(){
         Usuario usuario = Usuario.builder()
-                .email("admin")
-                .password("$2a$12$fEAJYJI9PuvQaaSgQlI.SeKkg0V/fZv4UiS.GUkebQUUeCI8sTXo.")
+                .email("bibliotecalibrys@gmail.com")
+                .password("$2a$12$d7XgSKR3FLEiTyMeZQ4kyeNzCeUfQT66hQym8L6czWQX9MRh/cLFO")
                 .role(RoleName.SUPORTE).
                 build();
         usuarioRepository.save(usuario);
