@@ -33,20 +33,6 @@ public class UsuarioController {
         return usuarioService.exibirUsuarios();
     }
 
-    private final UsuarioRepository usuarioRepository;
-
-    private final UsuarioService usuarioService;
-
-    @PostMapping("/login")
-    public String authenticate(Authentication authentication){
-        return authenticationService.authenticate(authentication);
-    }
-
-    @GetMapping("/listar")
-    public List<Usuario> listarUsuarios(){
-        return usuarioService.exibirUsuarios();
-    }
-
     @DeleteMapping("/deletar")
     public void remover(@RequestBody Funcionario funcionario){
         usuarioService.deletar(funcionario);
