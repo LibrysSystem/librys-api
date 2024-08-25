@@ -6,6 +6,7 @@ import com.librys.bibliotecalibrys.domain.exception.CpfFuncionarioEmUsoException
 import com.librys.bibliotecalibrys.domain.exception.FuncionarioNaoEncontradoException;
 import com.librys.bibliotecalibrys.domain.exception.LoginJaRegistrado;
 import com.librys.bibliotecalibrys.domain.model.Funcionario;
+import com.librys.bibliotecalibrys.domain.model.Usuario;
 import com.librys.bibliotecalibrys.domain.repository.FuncionarioRepository;
 import com.librys.bibliotecalibrys.domain.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -61,7 +63,7 @@ public class CadastroFuncionarioService {
     }
 
     public List<FuncionarioDTO> buscarPorEmail(String email){
-        List<Funcionario> emailPesquisado = funcionarioRepository.findByEmailContainingIgnoreCase(email);
+        Optional<Funcionario> emailPesquisado = funcionarioRepository.findByEmailContainingIgnoreCase(email);
 
         if(emailPesquisado.isEmpty()){
             throw new FuncionarioNaoEncontradoException("Funcionário não encontrado.");
@@ -92,9 +94,10 @@ public class CadastroFuncionarioService {
 
     public FuncionarioDTO atualizar(Funcionario funcionario){
         Funcionario funcionarioPesquisado = funcionarioRepository.findById(funcionario.getId()).orElseThrow();
+        Usuario funcionarioAtual = usuarioRepository.findUsuarioByEmail(funcionario.getEmail());
 
         BeanUtils.copyProperties(funcionario, funcionarioPesquisado, "id");
-        usuarioService.atualizarSenha(funcionarioPesquisado);
+        usuarioService.atualizarSenha(funcionarioAtual);
 
         funcionarioRepository.save(funcionarioPesquisado);
 
