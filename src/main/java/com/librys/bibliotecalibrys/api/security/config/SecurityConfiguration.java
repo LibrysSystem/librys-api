@@ -1,4 +1,4 @@
-package com.librys.bibliotecalibrys.security.config;
+package com.librys.bibliotecalibrys.api.security.config;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -38,7 +38,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers("/usuario/login").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/funcionarios").permitAll()
+                                .requestMatchers("/usuario/redefinir_senha").permitAll()
+                                .requestMatchers("http://localhost:8080/swagger-ui/index.html").permitAll()
                                 .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer(

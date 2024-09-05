@@ -1,12 +1,9 @@
-package com.librys.bibliotecalibrys.security.authentication;
+package com.librys.bibliotecalibrys.api.security.authentication;
 
 import com.librys.bibliotecalibrys.domain.model.Usuario;
-import com.librys.bibliotecalibrys.domain.model.UsuarioDTO;
-import com.librys.bibliotecalibrys.security.userdetails.UserDetailsImpl;
+import com.librys.bibliotecalibrys.api.DTO.UsuarioDTO;
+import com.librys.bibliotecalibrys.api.security.userdetails.UserDetailsImpl;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 

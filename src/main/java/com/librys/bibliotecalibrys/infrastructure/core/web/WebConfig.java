@@ -1,4 +1,4 @@
-package com.librys.bibliotecalibrys.core.web;
+package com.librys.bibliotecalibrys.infrastructure.core.web;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

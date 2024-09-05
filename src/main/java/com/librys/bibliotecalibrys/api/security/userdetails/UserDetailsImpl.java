@@ -1,4 +1,4 @@
-package com.librys.bibliotecalibrys.security.userdetails;
+package com.librys.bibliotecalibrys.api.security.userdetails;
 
 import com.librys.bibliotecalibrys.domain.model.Usuario;
 import org.springframework.security.core.GrantedAuthority;

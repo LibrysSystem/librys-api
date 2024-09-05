@@ -1,6 +1,6 @@
 package com.librys.bibliotecalibrys.domain.model;
 
-import com.librys.bibliotecalibrys.enums.RoleName;
+import com.librys.bibliotecalibrys.domain.enums.RoleName;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

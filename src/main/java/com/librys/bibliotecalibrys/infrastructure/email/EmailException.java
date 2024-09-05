@@ -1,4 +1,4 @@
-package com.librys.bibliotecalibrys.infrastructure.service.email;
+package com.librys.bibliotecalibrys.infrastructure.email;
 
 public class EmailException extends RuntimeException{
     private static final long serialVersionUID = 1L;

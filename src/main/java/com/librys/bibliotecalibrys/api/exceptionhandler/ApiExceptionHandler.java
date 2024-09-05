@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import com.librys.bibliotecalibrys.domain.exception.EntidadeEmUsoException;
 import com.librys.bibliotecalibrys.domain.exception.EntidadeNaoEncontradaException;
 import com.librys.bibliotecalibrys.domain.exception.NegocioException;
-import com.librys.bibliotecalibrys.infrastructure.service.email.EmailException;
+import com.librys.bibliotecalibrys.infrastructure.email.EmailException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.context.i18n.LocaleContextHolder;

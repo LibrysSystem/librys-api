@@ -1,6 +1,6 @@
-package com.librys.bibliotecalibrys.infrastructure.service.email;
+package com.librys.bibliotecalibrys.infrastructure.email;
 
-import com.librys.bibliotecalibrys.core.email.EmailProperties;
+import com.librys.bibliotecalibrys.infrastructure.core.email.EmailProperties;
 import com.librys.bibliotecalibrys.domain.service.EnvioEmailService;
 import freemarker.template.Configuration;
 import freemarker.template.Template;

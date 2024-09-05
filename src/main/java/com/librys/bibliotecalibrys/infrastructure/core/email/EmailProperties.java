@@ -1,4 +1,4 @@
-package com.librys.bibliotecalibrys.core.email;
+package com.librys.bibliotecalibrys.infrastructure.core.email;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
