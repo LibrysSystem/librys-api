@@ -1,4 +1,4 @@
-package com.librys.bibliotecalibrys.enums;
+package com.librys.bibliotecalibrys.domain.enums;
 
 public enum RoleName {
 

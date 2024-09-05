@@ -1,8 +1,8 @@
-package com.librys.bibliotecalibrys.seeders;
+package com.librys.bibliotecalibrys.infrastructure.seeders;
 
 import com.librys.bibliotecalibrys.domain.model.Usuario;
 import com.librys.bibliotecalibrys.domain.repository.UsuarioRepository;
-import com.librys.bibliotecalibrys.enums.RoleName;
+import com.librys.bibliotecalibrys.domain.enums.RoleName;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

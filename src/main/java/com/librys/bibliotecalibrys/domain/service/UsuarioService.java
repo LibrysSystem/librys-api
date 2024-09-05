@@ -5,11 +5,9 @@ import com.librys.bibliotecalibrys.domain.model.Funcionario;
 import com.librys.bibliotecalibrys.domain.model.Usuario;
 import com.librys.bibliotecalibrys.domain.repository.FuncionarioRepository;
 import com.librys.bibliotecalibrys.domain.repository.UsuarioRepository;
-import com.librys.bibliotecalibrys.enums.RoleName;
-import com.librys.bibliotecalibrys.infrastructure.service.email.EmailException;
+import com.librys.bibliotecalibrys.domain.enums.RoleName;
+import com.librys.bibliotecalibrys.infrastructure.email.EmailException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +43,7 @@ public class UsuarioService {
             var mensagem = EnvioEmailService.Mensagem.builder()
                     .assunto("Olá!")
                     .corpo("redefinir-senha.html")
-                    .variavel("link", "localhost:8080/usuarios/redefinir_senmh")
+                    .variavel("link", "localhost:8080/usuarios/redefinir_senha")
                     .destinatario(usuario.get().getEmail())
                     .build();
 
@@ -57,12 +55,11 @@ public class UsuarioService {
         return "Email enviado com sucesso";
     }
 
-    public void atualizarSenha(Usuario usuario){
-        Optional<Funcionario> funcionarioPesquisado = Optional.ofNullable(funcionarioRepository.findByEmail(usuario.getEmail()));
+    public void atualizarSenha(Funcionario funcionario){
+        Usuario funcionarioAtual = usuarioRepository.findUsuarioByEmail(funcionario.getEmail());
 
-        if(!funcionarioPesquisado.get().getSenha().equals(usuario.getPassword())){
-            funcionarioPesquisado.get().setSenha(usuario.getPassword());
-            registrarLogin(funcionarioPesquisado.get());
+        if(!funcionarioAtual.getPassword().equals(funcionario.getSenha())){
+            registrarLogin(funcionario);
         }
     }
 

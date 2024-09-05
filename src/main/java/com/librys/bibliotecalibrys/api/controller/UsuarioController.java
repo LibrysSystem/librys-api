@@ -2,10 +2,9 @@ package com.librys.bibliotecalibrys.api.controller;
 
 import com.librys.bibliotecalibrys.domain.model.Funcionario;
 import com.librys.bibliotecalibrys.domain.model.Usuario;
-import com.librys.bibliotecalibrys.domain.model.UsuarioDTO;
-import com.librys.bibliotecalibrys.domain.repository.UsuarioRepository;
+import com.librys.bibliotecalibrys.api.DTO.UsuarioDTO;
 import com.librys.bibliotecalibrys.domain.service.UsuarioService;
-import com.librys.bibliotecalibrys.security.authentication.AuthenticationService;
+import com.librys.bibliotecalibrys.api.security.authentication.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -32,10 +31,10 @@ public class UsuarioController {
         return usuarioService.redefinirSenha(email);
     }
 
-    @PutMapping("/atualizar-senha")
-    public void atualizarSenha(@Valid @RequestBody Usuario usuario){
-        usuarioService.atualizarSenha(usuario);
-    }
+//    @PutMapping("/atualizar-senha")
+//    public void atualizarSenha(@Valid @RequestBody Usuario usuario){
+//        usuarioService.atualizarSenha(usuario);
+//    }
 
     @GetMapping("/listar")
     public List<Usuario> listarUsuarios(){

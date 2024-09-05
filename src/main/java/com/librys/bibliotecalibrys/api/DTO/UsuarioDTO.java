@@ -1,6 +1,6 @@
 package com.librys.bibliotecalibrys.api.DTO;
 
-import com.librys.bibliotecalibrys.enums.RoleName;
+import com.librys.bibliotecalibrys.domain.enums.RoleName;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import lombok.Data;
 @Builder
 public class UsuarioDTO {
 
-    private String token;
     private RoleName role;
+    private String token;
 
 }

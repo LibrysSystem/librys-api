@@ -1,4 +1,4 @@
-package com.librys.bibliotecalibrys.security.config;
+package com.librys.bibliotecalibrys.api.security.config;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;

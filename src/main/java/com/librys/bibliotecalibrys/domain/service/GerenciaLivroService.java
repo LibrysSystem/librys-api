@@ -10,7 +10,7 @@ import com.librys.bibliotecalibrys.domain.model.LivroAlugado;
 import com.librys.bibliotecalibrys.domain.repository.ClienteRepository;
 import com.librys.bibliotecalibrys.domain.repository.GerenciaLivroRepository;
 import com.librys.bibliotecalibrys.domain.repository.LivroRepository;
-import com.librys.bibliotecalibrys.infrastructure.service.email.EmailException;
+import com.librys.bibliotecalibrys.infrastructure.email.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;

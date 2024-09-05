@@ -1,4 +1,4 @@
-package com.librys.bibliotecalibrys.core.mapper;
+package com.librys.bibliotecalibrys.infrastructure.core.mapper;
 
 import com.librys.bibliotecalibrys.api.DTO.AlugarLivroDTO;
 import com.librys.bibliotecalibrys.domain.model.Cliente;

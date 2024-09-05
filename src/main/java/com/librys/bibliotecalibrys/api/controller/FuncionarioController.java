@@ -26,7 +26,6 @@ public class FuncionarioController {
         return cadastroFuncionario.buscar(funcionarioId);
     }
 
-
     @GetMapping("/por-nome")
     public List<FuncionarioDTO> pesquisarPorNome(@RequestParam String nome){
         return cadastroFuncionario.buscarPorNome(nome);

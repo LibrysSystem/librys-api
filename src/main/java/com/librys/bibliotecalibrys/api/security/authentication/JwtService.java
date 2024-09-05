@@ -1,4 +1,4 @@
-package com.librys.bibliotecalibrys.security.authentication;
+package com.librys.bibliotecalibrys.api.security.authentication;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

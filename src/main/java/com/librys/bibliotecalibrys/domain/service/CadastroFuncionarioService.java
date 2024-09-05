@@ -94,10 +94,9 @@ public class CadastroFuncionarioService {
 
     public FuncionarioDTO atualizar(Funcionario funcionario){
         Funcionario funcionarioPesquisado = funcionarioRepository.findById(funcionario.getId()).orElseThrow();
-        Usuario funcionarioAtual = usuarioRepository.findUsuarioByEmail(funcionario.getEmail());
 
         BeanUtils.copyProperties(funcionario, funcionarioPesquisado, "id");
-        usuarioService.atualizarSenha(funcionarioAtual);
+        usuarioService.atualizarSenha(funcionario);
 
         funcionarioRepository.save(funcionarioPesquisado);
 
