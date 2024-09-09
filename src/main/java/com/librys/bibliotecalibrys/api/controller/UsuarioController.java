@@ -31,11 +31,6 @@ public class UsuarioController {
         return usuarioService.redefinirSenha(email);
     }
 
-//    @PutMapping("/atualizar-senha")
-//    public void atualizarSenha(@Valid @RequestBody Usuario usuario){
-//        usuarioService.atualizarSenha(usuario);
-//    }
-
     @GetMapping("/listar")
     public List<Usuario> listarUsuarios(){
         return usuarioService.exibirUsuarios();
